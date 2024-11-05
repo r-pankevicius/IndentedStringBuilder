@@ -96,6 +96,13 @@ public class StringBuilderScope : IDisposable
         return sb.ToString();
     }
 
+    /// <summary>
+    /// Just throws an exception, because it's not intended use case to add one scope to another.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Intentional</exception>
+    public StringBuilderScope Append(StringBuilderScope value) =>
+        throw new InvalidOperationException("It's usually a mistake if you try to add one scope to another.");
+
     private void AppendScope(StringBuilderScope childScope)
     {
         string scopedText = childScope.ToString();
