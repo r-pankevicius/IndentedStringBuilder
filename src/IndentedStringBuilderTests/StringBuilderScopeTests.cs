@@ -21,13 +21,14 @@ public class StringBuilderScopeTests
 
         sb.Append("for (var i = 0; i < array.length; i++)");
 
-        using (StringBuilderScope forBody = new(new(indent: "  ", blockStart: " {\n", blockEnd: "\n}\n")))
+        using (StringBuilderScope forBody = new(sb, new(indent: "  ", blockStart: " {\n", blockEnd: "\n}\n")))
         {
             forBody.AppendLine("sum += array[i];");
         }
+
         sb.AppendLine("console.log(sum);");
 
-        sb.ToString().Should().Be("for (var i = 0; i < array.length; i++)\n {\n  sum += array[i];\n}\nconsole.log(sum);\n");
+        sb.ToString().Should().Be("for (var i = 0; i < array.length; i++) {\n  sum += array[i];\n}\nconsole.log(sum);\n");
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace IndentedStringBuilder;
@@ -68,10 +69,31 @@ public class StringBuilderScope : IDisposable
 
     public override string ToString()
     {
-        // TODO: append block start,
-        // create text reader over text read each line, append current Indent,
-        // append block end
-        return _sb.ToString();
+        StringBuilder sb = new(_options.BlockStart);
+
+        if (string.IsNullOrEmpty(_options.Indent))
+        {
+            sb.Append(_sb.ToString());
+        }
+        else
+        {
+            string text = _sb.ToString();
+            if (!string.IsNullOrEmpty(text))
+            {
+                // Append Indent to each line
+                using TextReader reader = new StringReader(text);
+                string? line;
+                while ((line = reader.ReadLine()) is not null)
+                {
+                    // TODO: don't AppendLine for last line!
+                    sb.Append(_options.Indent).AppendLine(line);
+                }
+            }
+        }
+
+        sb.Append(_options.BlockEnd);
+
+        return sb.ToString();
     }
 
     private void AppendScope(StringBuilderScope childScope)
