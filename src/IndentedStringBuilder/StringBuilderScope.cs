@@ -106,8 +106,14 @@ public class StringBuilderScope : IDisposable
     private void AppendScope(StringBuilderScope childScope)
     {
         string scopedText = childScope.ToString();
-        // TODO: create text reader over text read each line, append current Indent
-        _sb.Append(scopedText);
+        StringReader stringReader = new(scopedText);
+        string line;
+
+        // TODO: may be an issue if scope end doesn't imply new line
+        while ((line = stringReader.ReadLine()) is not null)
+        {
+            _sb.AppendLine(line);
+        }
     }
 
     /// <summary>Appends the string representation of a specified Boolean value to this instance.</summary>
